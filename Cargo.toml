@@ -1,0 +1,14 @@
+[package]
+name = "Geel"
+version = "0.1.0"
+authors = ["AbdullahM0hamed"]
+
+[dependencies]
+rustyline = "11.0.0"
+clap = { version = "4.1.8", features = ["derive"] }
+crossterm = "0.26.1"
+dirs = "4.0.0"
+
+[[bin]]
+name = "geel"
+path = "src/main.rs"
