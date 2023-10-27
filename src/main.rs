@@ -1,9 +1,12 @@
 extern crate clap;
 extern crate dirs;
+extern crate meval;
 
 #[macro_use]
 extern crate crossterm;
 
+mod inbuilt;
+mod interpreter;
 mod lexer;
 mod parser;
 
@@ -158,19 +161,28 @@ fn repl() {
                 } else if event.code == KeyCode::Enter {
                     offset = 0;
                     write_history(&format!("{}\r\n", line));
-                    if line.chars().last() == Some(':') {
+                    if line.chars().last() == Some(':') && !multiline {
                         multiline = true;
                         code.clear();
                     } else if line.trim().is_empty() {
                         multiline = false;
-                        println!("{:?}", code);
                     }
 
                     if multiline {
                         code = code + &line + "\n";
                         repl_print(&out, "\r\n... ");
                     } else {
-                        repl_print(&out, "\r\n>>> ");
+                        repl_print(&out, "\r\n");
+                        let parsed: Vec<parser::ParsedNode>;
+                        if !code.is_empty() {
+                            parsed = parser::Parser::new(lexer::Lexer::new(&code).lex()).parse();
+                            code.clear();
+                        } else {
+                            parsed = parser::Parser::new(lexer::Lexer::new(&line).lex()).parse();
+                        }
+
+                        interpreter::Interpreter::new().interpret(true, parsed);
+                        repl_print(&out, ">>> ");
                     }
 
                     line.clear();
@@ -306,7 +318,6 @@ fn main() {
                 if Path::new(&name).exists() {
                     let contents = read_to_string(name).unwrap();
                     println!("{:?}", parser::Parser::new(Lexer::new(&contents).lex()).parse());
-                    //println!("{:?}", contents);
                 } else {
                     println!("Wax jirin baad noo tilmaamtey.");
                 }

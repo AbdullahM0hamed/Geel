@@ -1,0 +1,13 @@
+qayb fibonacci(x):
+    hadduu x < 0:
+        qor("Waa khalad")
+    ama hadduu x == 0:
+        celi 0
+    ama hadduu x == 1 ama x == 2:
+        celi 1
+    haddii-kale:
+        celi fibonacci(x - 1) + fibonacci(x - 2)
+
+x kastoo faraq(1, 11) kujira:
+    qor(fibonacci(x))
+

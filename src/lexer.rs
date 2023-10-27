@@ -16,16 +16,31 @@ pub enum Token {
     Minus,
     Divide,
     Multiply,
+    Modulus,
     Greater,
     GreaterOrEqual,
-    Lesser,
-    LesserOrEqual,
+    Less,
+    LessOrEqual,
+    Equal,
+    Ignore,
     Int(Vec<char>),
     Float(Vec<char>),
-    Whitespace(char),
+    Whitespace(Vec<char>),
     Speech(Vec<char>),
     Comment(Vec<char>),
     Word(Vec<char>)
+}
+
+impl PartialEq<Token> for &Token {
+    fn eq(&self, token: &Token) -> bool {
+        return token == *self;
+    }
+}
+
+impl PartialEq<Token> for &&Token {
+    fn eq(&self, token: &Token) -> bool {
+        return token == **self;
+    }
 }
 
 fn is_letter(ch: char) -> bool {
@@ -101,6 +116,19 @@ impl Lexer {
         return Token::Word(word);
     }
 
+    pub fn get_whitespace(&mut self) -> Token {
+        let mut whitespace: Vec<char> = vec![];
+        loop {
+            if !is_whitespace(self.ch) {
+                break;
+            }
+
+            whitespace.push(self.ch);
+            self.read_char();
+        }
+
+        return Token::Whitespace(whitespace);
+    }
     pub fn is_comment(&mut self) -> bool {
         if self.ch == '/' && self.read_position < self.input.len() {
             let next = self.input[self.read_position];
@@ -164,26 +192,24 @@ impl Lexer {
         }
 
         if is_whitespace(self.ch) {
-            token = Token::Whitespace(self.ch);
-            self.read_char();
-            return token;
+            return self.get_whitespace();
         }
 
         if self.is_comment() {
             return self.get_comment();
         }
 
-        if self.ch == '"' {
+        if self.is_speech() {
             return self.get_speech();
         }
 
-        if self.ch == '>' && self.read_position > self.input.len() && self.input[self.read_position] == '=' {
-            return Token::GreaterOrEqual;
-        }
+        //if self.ch == '>' && self.read_position > self.input.len() && self.input[self.read_position] == '=' {
+            //return Token::GreaterOrEqual;
+        //}
 
-        if self.ch == '<' && self.read_position > self.input.len() && self.input[self.read_position] == '=' {
-            return Token::LesserOrEqual;
-        }
+        //if self.ch == '<' && self.read_position > self.input.len() && self.input[self.read_position] == '=' {
+            //return Token::LesserOrEqual;
+        //}
 
         match self.ch {
             '(' => { token = Token::OpenParen; }
@@ -200,7 +226,8 @@ impl Lexer {
             '/' => { token = Token::Divide; }
             '*' => { token = Token::Multiply; }
             '>' => { token = Token::Greater; }
-            '<' => { token = Token::Lesser; }
+            '<' => { token = Token::Less; }
+            '%' => { token = Token::Modulus; }
             '§' => { token = Token::EOF; }
             _ => { token = Token::Comma; }
         }
