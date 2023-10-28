@@ -95,12 +95,6 @@ impl Parser {
         }
     }
 
-    pub fn read_token(&mut self) -> &Token {
-        let token = &self.tokens[self.position];
-        self.position += 1;
-        return token;
-    }
-
     pub fn skip_unnecessary(
         &mut self,
         tokens: Vec<Token>,
@@ -123,23 +117,29 @@ impl Parser {
         return position;
     }
 
-    pub fn get_function_call(&mut self, word: Vec<char>) -> ParsedNode {
-        self.position += 1;
+    pub fn get_function_call(
+        &mut self,
+        word: Vec<char>,
+        tokens: Vec<Token>,
+        pos: usize
+    ) -> (ParsedNode, usize) {
+        let mut position = pos + 1;
         let name: String = word.into_iter().collect();
         let mut open_count: usize = 0;
         let mut close_count: usize = 0;
         let mut args: Vec<Vec<Token>> = Vec::new();
         let mut arg_pos: usize = 0;
         loop {
-            self.position = self.skip_unnecessary(
-                (&self.tokens).to_owned(),
-                (&self.position).to_owned()
+            position = self.skip_unnecessary(
+                (&tokens).to_owned(),
+                (&position).to_owned()
             );
-            if self.position >= self.tokens.len() {
+            if position >= tokens.len() {
                 break;
             }
 
-            let token = self.read_token();
+            let token = &tokens[position];
+            position += 1;
             if token == Token::OpenParen {
                 open_count += 1;
             } else if token == Token::CloseParen {
@@ -183,10 +183,10 @@ impl Parser {
             }
         });
 
-        return ParsedNode::FunctionCall {
+        return (ParsedNode::FunctionCall {
             name: name,
             params: params
-        }
+        }, position)
     }
 
     const OPERATIONS: [Token; 5] = [
@@ -421,7 +421,9 @@ impl Parser {
             }
         }
 
-        return self.parse_conditions(if_tokens);
+        let a = self.parse_conditions(if_tokens);
+        //print!("M: {:?}\r\n", a);
+        return a;
     }
 
     pub fn parse_conditions(
@@ -431,7 +433,7 @@ impl Parser {
         let mut parsed_conditions: Vec<(Vec<Vec<ParsedNode>>, Vec<ParsedNode>)> = Vec::new();
 
         let if_indent = conditions[0].1;
-        for (line, cond) in conditions.iter().enumerate() {
+        for cond in conditions {
             let indent_level = cond.1;
 
             if indent_level == if_indent {
@@ -496,8 +498,7 @@ impl Parser {
             }
         }
 
-        let chain = ParsedNode::IfChain { blocks: parsed_conditions };
-        return ParsedNode::Ignore;
+        return ParsedNode::IfChain { blocks: parsed_conditions };
     }
 
     pub fn get_or_separated(
@@ -508,7 +509,7 @@ impl Parser {
             .split(|&ref v| v == Token::Word(vec!['a', 'm', 'a']));
 
         let mut splits: Vec<Vec<Vec<Token>>> = Vec::new();
-        for (i, or) in or_split.enumerate() {
+        for or in or_split {
             let and_split = or
                 .split(|v| v == Token::Word(vec!['i', 'y', 'o']));
 
@@ -602,8 +603,9 @@ impl Parser {
             Token::Word(word) => {
                 let word_str = word.to_vec().iter().collect::<String>();
                 if &tokens[next] == Token::OpenParen {
-                    position += 1;
-                    node = self.get_function_call(word.to_vec());
+                    let func = self.get_function_call(word.to_vec(), tokens.clone(), position.clone());
+                    node = func.0;
+                    position = func.1;
                 } else if &word_str == "hadduu" {
                     node = self.get_if_parsed();
                 } else if self.is_assignment(tokens.clone(), position) {

@@ -54,7 +54,7 @@ impl Inbuilt<'_> {
                 _ => { }
             }
         });
-        print!("{:?}\r\n", output.trim());
+        print!("{}\r\n", output.trim());
         return vec![];
     }
 
