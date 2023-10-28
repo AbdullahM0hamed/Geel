@@ -95,7 +95,6 @@ impl Interpreter {
                             self.interpret(repl, (&block.1).to_owned());
                             break;
                         }
-                        //println!("Any: {:?}", any);
                     }
                 },
                 _ => { self.print(block.to_owned()) }
@@ -113,7 +112,21 @@ impl Interpreter {
         let mut right_solved: f64 = 0.0;
 
         for l in left.as_ref().clone() {
+            let mut parsed_l = l.clone();
             match l {
+                ParsedNode::Variable { name, .. } => {
+                    unsafe {
+                        let pos = VARIABLE_DICT.iter().position(|(v, _)| v == &name);
+                        if pos.is_some() {
+                            let variable = &VARIABLE_DICT[pos.unwrap()].1;
+                            parsed_l = variable.as_ref().clone();
+                        }
+                    }
+                }
+                _ => { }
+            }
+
+            match parsed_l {
                 ParsedNode::Int { val } | ParsedNode::Float { val} => {
                     left_solved += val.iter().collect::<String>().parse::<f64>().unwrap();
                 }
@@ -125,7 +138,21 @@ impl Interpreter {
         }
 
         for r in right.as_ref().clone() {
+            let mut parsed_r = r.clone();
             match r {
+                ParsedNode::Variable { name, .. } => {
+                    unsafe {
+                        let pos = VARIABLE_DICT.iter().position(|(v, _)| v == &name);
+                        if pos.is_some() {
+                            let variable = &VARIABLE_DICT[pos.unwrap()].1;
+                            parsed_r = variable.as_ref().clone();
+                        }
+                    }
+                }
+                _ => { }
+            }
+
+            match parsed_r {
                 ParsedNode::Int { val } | ParsedNode::Float { val} => {
                     right_solved += val.iter().collect::<String>().parse::<f64>().unwrap();
                 }
