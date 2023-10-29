@@ -613,6 +613,7 @@ impl Parser {
                     position = assigned.1;
                     node = assigned.0;
                 } else if !KEYWORDS.contains(&(word_str.as_str())) {
+                    //For loop stuff
                     node = ParsedNode::Variable {
                         name: word_str,
                         exists: true,
