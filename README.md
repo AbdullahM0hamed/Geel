@@ -51,29 +51,29 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 ## Keywords
 
-[x] - and -> iyo
+- [x] - and -> iyo
 
-[ ] - not -> maaha
+- [ ] - not -> maaha
 
-[x] - or -> ama
+- [x] - or -> ama
 
-[ ] - continue -> gudub
+- [ ] - continue -> gudub
 
-[ ] - boolean -> booliyan
+- [ ] - boolean -> booliyan
 
-[ ] - break -> jooji
+- [ ] - break -> jooji
 
-[ ] - True -> Run
+- [ ] - True -> Run
 
-[ ] - False -> Been
+- [ ] - False -> Been
 
-[ ] - None -> Waxba
+- [ ] - None -> Waxba
 
-[ ] - import -> keen
+- [ ] - import -> keen
 
-[ ] - from -> ka
+- [ ] - from -> ka
 
-[ ] - as -> sida
+- [ ] - as -> sida
 
 
 ### Planned usage for imports
@@ -84,29 +84,29 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 >>> [LIBRARY] keen
 ```
 
-[ ] - try -> tijaabi
+- [ ] - try -> tijaabi
 
-[ ] - except -> qabo
+- [ ] - except -> qabo
 
-[ ] - finally -> ugu-dambeyn
+- [ ] - finally -> ugu-dambeyn
 
-[ ] - assert -> xaqiiji
+- [ ] - assert -> xaqiiji
 
-[ ] - class -> kayd
+- [ ] - class -> kayd
 
-[ ] - def -> qayb
+- [ ] - def -> qayb
 
-[ ] - del -> tir
+- [ ] - del -> tir
 
-[x] - if -> hadduu
+- [x] - if -> hadduu
 
-[x] - elif -> ama hadduu
+- [x] - elif -> ama hadduu
 
-[x] - else -> haddii-kale
+- [x] - else -> haddii-kale
 
-[ ] - for -> kastoo
+- [ ] - for -> kastoo
 
-[ ] - in -> kujira
+- [ ] - in -> kujira
 
 
 ### Planned usage for for loops
@@ -117,310 +117,310 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 ...
 ```
 
-[ ] - global -> caalami
+- [ ] - global -> caalami
 
-[ ] - is -> waa
+- [ ] - is -> waa
 
-[ ] - lambda -> laamda
+- [ ] - lambda -> laamda
 
-[ ] - nonlocal -
+- [ ] - nonlocal -
 
-[ ] - pass -> dhaaf
+- [ ] - pass -> dhaaf
 
-[ ] - raise -> tus
+- [ ] - raise -> tus
 
-[ ] - return - celi
+- [ ] - return - celi
 
-[ ] - while -> intuu
+- [ ] - while -> intuu
 
-[ ] - with -> isticmaal
+- [ ] - with -> isticmaal
 
-[ ] - yield -> sii
+- [ ] - yield -> sii
 
 
 ## Built-in functions
 
-[ ] abs -> qiimahasugan
+- [ ] abs -> qiimahasugan
 
-[ ] aiter ->
+- [ ] aiter ->
 
-[ ] all -> kulli
+- [ ] all -> kulli
 
-[ ] anext ->
+- [ ] anext ->
 
-[ ] any -> midkasta
+- [ ] any -> midkasta
 
-[ ] ascii ->
+- [ ] ascii ->
 
-[x] bin -> labaale
+- [x] bin -> labaale
 
-[ ] bool -> bool
+- [ ] bool -> bool
 
-[ ] breakpoint ->
+- [ ] breakpoint ->
 
-[ ] bytearray ->
+- [ ] bytearray ->
 
-[ ] bytes ->
+- [ ] bytes ->
 
-[ ] callable ->
+- [ ] callable ->
 
-[ ] chr ->
+- [ ] chr ->
 
-[ ] classmethod -> qaybkaydeed
+- [ ] classmethod -> qaybkaydeed
 
-[ ] compile -> dhis
+- [ ] compile -> dhis
 
-[ ] complex ->
+- [ ] complex ->
 
-[ ] delattr ->
+- [ ] delattr ->
 
-[ ] dict -> qaamuus
+- [ ] dict -> qaamuus
 
-[ ] dir -> sifosheeg
+- [ ] dir -> sifosheeg
 
-[x] divmod -> qaybiyobaaq
+- [x] divmod -> qaybiyobaaq
 
-[ ] enumerate -> tiri
+- [ ] enumerate -> tiri
 
-[ ] eval -> qiimee
+- [ ] eval -> qiimee
 
-[ ] exec ->
+- [ ] exec ->
 
-[ ] exit -> bax
+- [ ] exit -> bax
 
-[ ] filter -> kasooc
+- [ ] filter -> kasooc
 
-[ ] float -> tobanle
+- [ ] float -> tobanle
 
-[ ] format -> hagaaji
+- [ ] format -> hagaaji
 
-[ ] frozenset ->
+- [ ] frozenset ->
 
-[ ] getattr ->
+- [ ] getattr ->
 
-[ ] globals -> caalamiyaasha
+- [ ] globals -> caalamiyaasha
 
-[ ] hasattr -> sifomaleeyahay
+- [ ] hasattr -> sifomaleeyahay
 
-[ ] hash ->
+- [ ] hash ->
 
-[ ] help -> caawimaad
+- [ ] help -> caawimaad
 
-[ ] hex -> lixyatobaneyn
+- [ ] hex -> lixyatobaneyn
 
-[ ] id -> lambarugaar
+- [ ] id -> lambarugaar
 
-[ ] input -> weydii
+- [ ] input -> weydii
 
-[ ] int -> tirodhan
+- [ ] int -> tirodhan
 
-[ ] isinstance ->
+- [ ] isinstance ->
 
-[ ] issubclass ->
+- [ ] issubclass ->
 
-[ ] iter -> midmid
+- [ ] iter -> midmid
 
-[ ] len -> dherer
+- [ ] len -> dherer
 
-[ ] list -> aruur
+- [ ] list -> aruur
 
-[ ] locals ->
+- [ ] locals ->
 
-[ ] map ->
+- [ ] map ->
 
-[ ] max -> ugubadnaan
+- [ ] max -> ugubadnaan
 
-[ ] memoryview ->
+- [ ] memoryview ->
 
-[ ] min -> uguyaraan
+- [ ] min -> uguyaraan
 
-[ ] next -> wad
+- [ ] next -> wad
 
-[ ] object -> wax
+- [ ] object -> wax
 
-[ ] oct -> siddeedid
+- [ ] oct -> siddeedid
 
-[ ] open -> fur
+- [ ] open -> fur
 
-[ ] ord ->
+- [ ] ord ->
 
-[ ] pow ->
+- [ ] pow ->
 
-[x] print -> qor
+- [x] print -> qor
 
-[ ] property -> sifo
+- [ ] property -> sifo
 
-[x] range -> faraq
+- [x] range -> faraq
 
-[ ] repr -> muuqaal
+- [ ] repr -> muuqaal
 
-[ ] reversed -> rogan
+- [ ] reversed -> rogan
 
-[ ] round -> tirobuuxin
+- [ ] round -> tirobuuxin
 
-[ ] set -> urur
+- [ ] set -> urur
 
-[ ] setattr ->
+- [ ] setattr ->
 
-[ ] slice -> qaybi
+- [ ] slice -> qaybi
 
-[ ] sorted -> soocan
+- [ ] sorted -> soocan
 
-[ ] staticmethod ->
+- [ ] staticmethod ->
 
-[ ] str -> qoraal
+- [ ] str -> qoraal
 
-[ ] sum -> iskudar
+- [ ] sum -> iskudar
 
-[ ] super -> dhaxal
+- [ ] super -> dhaxal
 
-[ ] tuple -> uruur
+- [ ] tuple -> uruur
 
-[ ] type -> nooc
+- [ ] type -> nooc
 
-[ ] vars ->
+- [ ] vars ->
 
-[ ] zip -> iskuxer
+- [ ] zip -> iskuxer
 
 
 ## Exceptions
 
-[ ] BaseException -> KhaladAasaasi
+- [ ] BaseException -> KhaladAasaasi
 
-[ ] Exception -> Khalad
+- [ ] Exception -> Khalad
 
-[ ] ArithmeticError -> KhaladXisaabeed
+- [ ] ArithmeticError -> KhaladXisaabeed
 
-[ ] BufferError ->
+- [ ] BufferError ->
 
-[ ] LookupError ->
+- [ ] LookupError ->
 
-[ ] AssertionError -> KhaladXaqiijin
+- [ ] AssertionError -> KhaladXaqiijin
 
-[ ] AttributeError -> KhaladSifeed
+- [ ] AttributeError -> KhaladSifeed
 
-[ ] EOFError -> KhaladQoraalDhamaa
+- [ ] EOFError -> KhaladQoraalDhamaa
 
-[ ] FloatingPointError -> KhaladTobanle
+- [ ] FloatingPointError -> KhaladTobanle
 
-[ ] GeneratorExit ->
+- [ ] GeneratorExit ->
 
-[ ] ImportError -> KhaladKeenid
+- [ ] ImportError -> KhaladKeenid
 
-[ ] ModuleNotFoundError ->
+- [ ] ModuleNotFoundError ->
 
-[ ] IndexError -> KhaladJagaale
+- [ ] IndexError -> KhaladJagaale
 
-[ ] KeyError ->
+- [ ] KeyError ->
 
-[x] KeyboardInterrupt -> WaaLaJoojiyey
+- [x] KeyboardInterrupt -> WaaLaJoojiyey
 
-[ ] MemoryError -> KhaladXasuuseed
+- [ ] MemoryError -> KhaladXasuuseed
 
-[ ] NameError -> KhaladMagceed
+- [ ] NameError -> KhaladMagceed
 
-[ ] NotImplementedError -> KhaladLamaSameyn
+- [ ] NotImplementedError -> KhaladLamaSameyn
 
-[ ] OSError ->
+- [ ] OSError ->
 
-[ ] OverflowError ->
+- [ ] OverflowError ->
 
-[ ] RecursionError -> KhaladCelcelis
+- [ ] RecursionError -> KhaladCelcelis
 
-[ ] ReferenceError ->
+- [ ] ReferenceError ->
 
-[ ] RuntimeError ->
+- [ ] RuntimeError ->
 
-[ ] StopIteration ->
+- [ ] StopIteration ->
 
-[ ] StopAsyncIteration ->
+- [ ] StopAsyncIteration ->
 
-[ ] IndentationError ->
+- [ ] IndentationError ->
 
-[ ] TabError ->
+- [ ] TabError ->
 
-[ ] SystemError ->
+- [ ] SystemError ->
 
-[ ] SystemExit ->
+- [ ] SystemExit ->
 
-[ ] TypeError -> NoocKhaldan
+- [ ] TypeError -> NoocKhaldan
 
-[ ] UnboundLocalError ->
+- [ ] UnboundLocalError ->
 
-[ ] UnicodeError ->
+- [ ] UnicodeError ->
 
-[ ] UnicodeEncodeError ->
+- [ ] UnicodeEncodeError ->
 
-[ ] UnicodeDecodeError ->
+- [ ] UnicodeDecodeError ->
 
-[ ] UnicodeTranslateError ->
+- [ ] UnicodeTranslateError ->
 
-[ ] ValueError -> KhaladQiimeyn
+- [ ] ValueError -> KhaladQiimeyn
 
-[ ] ZeroDivisionError -> KhaladEberUQeybin
+- [ ] ZeroDivisionError -> KhaladEberUQeybin
 
-[ ] EnvironmentError ->
+- [ ] EnvironmentError ->
 
-[ ] IOError ->
+- [ ] IOError ->
 
-[ ] WindowsError ->
+- [ ] WindowsError ->
 
-[ ] BlockingIOError ->
+- [ ] BlockingIOError ->
 
-[ ] ChildProcessError ->
+- [ ] ChildProcessError ->
 
-[ ] ConnectionError ->
+- [ ] ConnectionError ->
 
-[ ] BrokenPipeError ->
+- [ ] BrokenPipeError ->
 
-[ ] ConnectionAbortedError -> KhaladXiriirLaGoo
+- [ ] ConnectionAbortedError -> KhaladXiriirLaGoo
 
-[ ] ConnectionRefusedError -> KhaladXiriirLaDiid
+- [ ] ConnectionRefusedError -> KhaladXiriirLaDiid
 
-[ ] ConnectionResetError ->
+- [ ] ConnectionResetError ->
 
-[ ] FileExistsError ->
+- [ ] FileExistsError ->
 
-[ ] FileNotFoundError ->
+- [ ] FileNotFoundError ->
 
-[ ] InterruptedError ->
+- [ ] InterruptedError ->
 
-[ ] IsADirectoryError ->
+- [ ] IsADirectoryError ->
 
-[ ] NotADirectoryError ->
+- [ ] NotADirectoryError ->
 
-[ ] PermissionError -> KhaladOgolaansho
+- [ ] PermissionError -> KhaladOgolaansho
 
-[ ] ProcessLookupError ->
+- [ ] ProcessLookupError ->
 
-[ ] TimeoutError ->
+- [ ] TimeoutError ->
 
-[ ] Warning -> Digniin
+- [ ] Warning -> Digniin
 
-[ ] UserWarning ->
+- [ ] UserWarning ->
 
-[ ] DeprecationWarning ->
+- [ ] DeprecationWarning ->
 
-[ ] PendingDeprecationWarning ->
+- [ ] PendingDeprecationWarning ->
 
-[ ] SyntaxWarning ->
+- [ ] SyntaxWarning ->
 
-[ ] RuntimeWarning ->
+- [ ] RuntimeWarning ->
 
-[ ] FutureWarning ->
+- [ ] FutureWarning ->
 
-[ ] ImportWarning -> DigniinKeenid
+- [ ] ImportWarning -> DigniinKeenid
 
-[ ] UnicodeWarning ->
+- [ ] UnicodeWarning ->
 
-[ ] EncodingWarning ->
+- [ ] EncodingWarning ->
 
-[ ] BytesWarning ->
+- [ ] BytesWarning ->
 
-[ ] ResourceWarning ->
+- [ ] ResourceWarning ->
 
 
 ## Additional (extra-pythonic)
 
-[ ] - when -> markuu
+- [ ] - when -> markuu
 
