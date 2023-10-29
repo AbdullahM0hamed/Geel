@@ -47,33 +47,33 @@ Some basic supported code:
 "Some Text"
 ```
 
-Below is a checklist of keywords, methods, and errors that are planned, as well as their status - on the left will be a python keyword (except the list which is kotlin) and on the right will be the Somali word I've selected for it:
+Below is a checklist of keywords, methods, and errors that are planned, as well as their status - on the left will be a python keyword (except the last which is kotlin) and on the right will be the Somali word I've selected for it:
 
 ## Keywords
 
-- [x] - and -> iyo
+- [x] and -> iyo
 
-- [ ] - not -> maaha
+- [ ] not -> maaha
 
-- [x] - or -> ama
+- [x] or -> ama
 
-- [ ] - continue -> gudub
+- [ ] continue -> gudub
 
-- [ ] - boolean -> booliyan
+- [ ] boolean -> booliyan
 
-- [ ] - break -> jooji
+- [ ] break -> jooji
 
-- [ ] - True -> Run
+- [ ] True -> Run
 
-- [ ] - False -> Been
+- [ ] False -> Been
 
-- [ ] - None -> Waxba
+- [ ] None -> Waxba
 
-- [ ] - import -> keen
+- [ ] import -> keen
 
-- [ ] - from -> ka
+- [ ] from -> ka
 
-- [ ] - as -> sida
+- [ ] as -> sida
 
 
 ### Planned usage for imports
@@ -84,29 +84,29 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 >>> [LIBRARY] keen
 ```
 
-- [ ] - try -> tijaabi
+- [ ] try -> tijaabi
 
-- [ ] - except -> qabo
+- [ ] except -> qabo
 
-- [ ] - finally -> ugu-dambeyn
+- [ ] finally -> ugu-dambeyn
 
-- [ ] - assert -> xaqiiji
+- [ ] assert -> xaqiiji
 
-- [ ] - class -> kayd
+- [ ] class -> kayd
 
-- [ ] - def -> qayb
+- [ ] def -> qayb
 
-- [ ] - del -> tir
+- [ ] del -> tir
 
-- [x] - if -> hadduu
+- [x] if -> hadduu
 
-- [x] - elif -> ama hadduu
+- [x] elif -> ama hadduu
 
-- [x] - else -> haddii-kale
+- [x] else -> haddii-kale
 
-- [ ] - for -> kastoo
+- [ ] for -> kastoo
 
-- [ ] - in -> kujira
+- [ ] in -> kujira
 
 
 ### Planned usage for for loops
@@ -117,25 +117,25 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 ...
 ```
 
-- [ ] - global -> caalami
+- [ ] global -> caalami
 
-- [ ] - is -> waa
+- [ ] is -> waa
 
-- [ ] - lambda -> laamda
+- [ ] lambda -> laamda
 
-- [ ] - nonlocal -
+- [ ] nonlocal -
 
-- [ ] - pass -> dhaaf
+- [ ] pass -> dhaaf
 
-- [ ] - raise -> tus
+- [ ] raise -> tus
 
-- [ ] - return - celi
+- [ ] return - celi
 
-- [ ] - while -> intuu
+- [ ] while -> intuu
 
-- [ ] - with -> isticmaal
+- [ ] with -> isticmaal
 
-- [ ] - yield -> sii
+- [ ] yield -> sii
 
 
 ## Built-in functions
@@ -150,7 +150,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] any -> midkasta
 
-- [ ] ascii ->
+- [ ] ascii -> qoraalkadhig
 
 - [x] bin -> labaale
 
@@ -164,7 +164,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] callable ->
 
-- [ ] chr ->
+- [ ] chr -> qoraalmid
 
 - [ ] classmethod -> qaybkaydeed
 
@@ -172,7 +172,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] complex ->
 
-- [ ] delattr ->
+- [ ] delattr -> sifotir
 
 - [ ] dict -> qaamuus
 
@@ -194,21 +194,21 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] format -> hagaaji
 
-- [ ] frozenset ->
+- [ ] frozenset -> ururbadalmeyn
 
-- [ ] getattr ->
+- [ ] getattr -> sifokeen
 
 - [ ] globals -> caalamiyaasha
 
 - [ ] hasattr -> sifomaleeyahay
 
-- [ ] hash ->
+- [ ] hash -> lambarugaar
 
 - [ ] help -> caawimaad
 
 - [ ] hex -> lixyatobaneyn
 
-- [ ] id -> lambarugaar
+- [ ] id -> lambarlagugarto
 
 - [ ] input -> weydii
 
@@ -242,7 +242,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] open -> fur
 
-- [ ] ord ->
+- [ ] ord -> lambarkadhig
 
 - [ ] pow ->
 
@@ -260,7 +260,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] set -> urur
 
-- [ ] setattr ->
+- [ ] setattr -> sifobadal
 
 - [ ] slice -> qaybi
 
@@ -293,7 +293,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] BufferError ->
 
-- [ ] LookupError ->
+- [ ] LookupError -> KhaladRaadin
 
 - [ ] AssertionError -> KhaladXaqiijin
 
@@ -311,7 +311,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] IndexError -> KhaladJagaale
 
-- [ ] KeyError ->
+- [ ] KeyError -> KhaladFuro
 
 - [x] KeyboardInterrupt -> WaaLaJoojiyey
 
@@ -323,7 +323,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] OSError ->
 
-- [ ] OverflowError ->
+- [ ] OverflowError -> KhaladWeynaan
 
 - [ ] RecursionError -> KhaladCelcelis
 
@@ -347,7 +347,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] UnboundLocalError ->
 
-- [ ] UnicodeError ->
+- [ ] UnicodeError -> KhaladUnicode
 
 - [ ] UnicodeEncodeError ->
 
@@ -369,7 +369,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] ChildProcessError ->
 
-- [ ] ConnectionError ->
+- [ ] ConnectionError -> KhaladXiriir
 
 - [ ] BrokenPipeError ->
 
@@ -379,11 +379,11 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] ConnectionResetError ->
 
-- [ ] FileExistsError ->
+- [ ] FileExistsError -> KhaladKaydWuuJiraa
 
-- [ ] FileNotFoundError ->
+- [ ] FileNotFoundError -> KhaladKaydLamaHelin
 
-- [ ] InterruptedError ->
+- [ ] InterruptedError -> KhaladLaGoo
 
 - [ ] IsADirectoryError ->
 
@@ -397,7 +397,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] Warning -> Digniin
 
-- [ ] UserWarning ->
+- [ ] UserWarning -> DigniinShaqsi
 
 - [ ] DeprecationWarning ->
 
@@ -407,11 +407,11 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] RuntimeWarning ->
 
-- [ ] FutureWarning ->
+- [ ] FutureWarning -> DigniinMustaqbal
 
 - [ ] ImportWarning -> DigniinKeenid
 
-- [ ] UnicodeWarning ->
+- [ ] UnicodeWarning -> DigniinUnicode
 
 - [ ] EncodingWarning ->
 
@@ -422,5 +422,5 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 ## Additional (extra-pythonic)
 
-- [ ] - when -> markuu
+- [ ] when -> markuu
 
