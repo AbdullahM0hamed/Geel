@@ -6,7 +6,7 @@
 
 # Build
 
-To build the compiler, simply do: `cargo build` in the root folder.
+To build the interpreter, simply do: `cargo build` in the root folder.
 
 # Usage
 
