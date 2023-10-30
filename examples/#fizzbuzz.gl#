@@ -1,9 +1,0 @@
-x kastoo faraq(1, 99) kujira:
-    hadduu x % 3 == 0 iyo x % 5 == 0:
-        qor("FizzBuzz")
-    ama hadduu x % 3 == 0:
-        qor("Fizz")
-    ama hadduu x % 5 == 0:
-        qor("Buzz")
-    haddii-kale:
-        qor(x)

@@ -142,11 +142,11 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] abs -> qiimahasugan
 
-- [ ] aiter ->
+- [ ] aiter -> kamidmid
 
 - [ ] all -> kulli
 
-- [ ] anext ->
+- [ ] anext -> kawad
 
 - [ ] any -> midkasta
 
@@ -156,13 +156,13 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] bool -> bool
 
-- [ ] breakpoint ->
+- [ ] breakpoint -> bartaanbaar
 
-- [ ] bytearray ->
+- [ ] bytearray -> kooxdhibco
 
-- [ ] bytes ->
+- [ ] bytes -> dhibco
 
-- [ ] callable ->
+- [ ] callable -> mashaquuqabtaa
 
 - [ ] chr -> qoraalmid
 
@@ -170,7 +170,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] compile -> dhis
 
-- [ ] complex ->
+- [ ] complex -> kakan
 
 - [ ] delattr -> sifotir
 
@@ -184,7 +184,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] eval -> qiimee
 
-- [ ] exec ->
+- [ ] exec -> samee
 
 - [ ] exit -> bax
 
@@ -214,9 +214,9 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] int -> tirodhan
 
-- [ ] isinstance ->
+- [ ] isinstance -> makaydkoosocotaa
 
-- [ ] issubclass ->
+- [ ] issubclass -> makaydkuudhaxlay
 
 - [ ] iter -> midmid
 
@@ -226,7 +226,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] locals ->
 
-- [ ] map ->
+- [ ] map -> kushaqee
 
 - [ ] max -> ugubadnaan
 
@@ -266,7 +266,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] sorted -> soocan
 
-- [ ] staticmethod ->
+- [ ] staticmethod -> qaybguud
 
 - [ ] str -> qoraal
 
@@ -291,7 +291,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] ArithmeticError -> KhaladXisaabeed
 
-- [ ] BufferError ->
+- [ ] BufferError -> KhaladXasuusKuMeelGaar
 
 - [ ] LookupError -> KhaladRaadin
 
@@ -303,7 +303,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] FloatingPointError -> KhaladTobanle
 
-- [ ] GeneratorExit ->
+- [ ] GeneratorExit -> ShaqaaleNoqnoqodBax
 
 - [ ] ImportError -> KhaladKeenid
 
@@ -327,33 +327,33 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] RecursionError -> KhaladCelcelis
 
-- [ ] ReferenceError ->
+- [ ] ReferenceError -> KhaladTixraac
 
-- [ ] RuntimeError ->
+- [ ] RuntimeError -> KhaladGoortaShaqada
 
-- [ ] StopIteration ->
+- [ ] StopIteration -> JoojiNoqnoqodka
 
-- [ ] StopAsyncIteration ->
+- [ ] StopAsyncIteration -> JoojiKalaNoqnoqodka
 
-- [ ] IndentationError ->
+- [ ] IndentationError -> KhaladBeegmid
 
-- [ ] TabError ->
+- [ ] TabError -> KhaladBoodid
 
-- [ ] SystemError ->
+- [ ] SystemError -> KhaladHabdhis
 
-- [ ] SystemExit ->
+- [ ] SystemExit -> HabdhisBax
 
 - [ ] TypeError -> NoocKhaldan
 
 - [ ] UnboundLocalError ->
 
-- [ ] UnicodeError -> KhaladUnicode
+- [ ] UnicodeError -> KhaladHabxarfeed
 
-- [ ] UnicodeEncodeError ->
+- [ ] UnicodeEncodeError -> KhaladHabxarfeedUBadal
 
-- [ ] UnicodeDecodeError ->
+- [ ] UnicodeDecodeError -> KhaladHabxarfeedKaBadal
 
-- [ ] UnicodeTranslateError ->
+- [ ] UnicodeTranslateError -> KhaladTurjumidHabxarfeed
 
 - [ ] ValueError -> KhaladQiimeyn
 
@@ -361,23 +361,21 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] EnvironmentError ->
 
-- [ ] IOError ->
-
-- [ ] WindowsError ->
+- [ ] IOError -> KhaladGB (Galin-Bixin)
 
 - [ ] BlockingIOError ->
 
-- [ ] ChildProcessError ->
+- [ ] ChildProcessError -> KhaladHawlQabashoDhaxlan
 
 - [ ] ConnectionError -> KhaladXiriir
 
-- [ ] BrokenPipeError ->
+- [ ] BrokenPipeError -> KhaladTuubboJaban
 
 - [ ] ConnectionAbortedError -> KhaladXiriirLaGoo
 
 - [ ] ConnectionRefusedError -> KhaladXiriirLaDiid
 
-- [ ] ConnectionResetError ->
+- [ ] ConnectionResetError -> KhaladDibUXiriir
 
 - [ ] FileExistsError -> KhaladKaydWuuJiraa
 
@@ -385,37 +383,37 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] InterruptedError -> KhaladLaGoo
 
-- [ ] IsADirectoryError ->
+- [ ] IsADirectoryError -> KhaladWaaGal
 
-- [ ] NotADirectoryError ->
+- [ ] NotADirectoryError -> KhaladGalMaaha
 
 - [ ] PermissionError -> KhaladOgolaansho
 
-- [ ] ProcessLookupError ->
+- [ ] ProcessLookupError -> KhaladHawlQabashoRaadin
 
-- [ ] TimeoutError ->
+- [ ] TimeoutError -> KhaladWaqtigaaKaDhamaaday
 
 - [ ] Warning -> Digniin
 
 - [ ] UserWarning -> DigniinShaqsi
 
-- [ ] DeprecationWarning ->
+- [ ] DeprecationWarning -> DigniinWaaDuug
 
-- [ ] PendingDeprecationWarning ->
+- [ ] PendingDeprecationWarning -> DigniinDuugBuuNoqon
 
-- [ ] SyntaxWarning ->
+- [ ] SyntaxWarning -> DigniinHabQoraal
 
-- [ ] RuntimeWarning ->
+- [ ] RuntimeWarning -> DigniinGoortaShaqada
 
 - [ ] FutureWarning -> DigniinMustaqbal
 
 - [ ] ImportWarning -> DigniinKeenid
 
-- [ ] UnicodeWarning -> DigniinUnicode
+- [ ] UnicodeWarning -> DigniinHabxarfeed
 
-- [ ] EncodingWarning ->
+- [ ] EncodingWarning -> DigniinBadalid
 
-- [ ] BytesWarning ->
+- [ ] BytesWarning -> DigniinDhibco
 
 - [ ] ResourceWarning ->
 
