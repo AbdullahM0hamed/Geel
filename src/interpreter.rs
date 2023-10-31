@@ -44,6 +44,7 @@ impl Interpreter {
                                     0 => {
                                         VARIABLE_DICT[pos].1 = value.clone().unwrap();
                                     }
+                                    //TODO: Put this in a method
                                     1 => {
                                         let mut all_items: Vec<Token> = Vec::new();
                                         let old = (&VARIABLE_DICT[pos].1).to_owned();
