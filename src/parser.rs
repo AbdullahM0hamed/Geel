@@ -56,6 +56,7 @@ pub enum ParsedNode {
     Variable {
         name: String,
         exists: bool,
+        add_sub: usize,
         value: Option<Box<ParsedNode>>
     },
     Ignore
@@ -542,6 +543,7 @@ impl Parser {
                             ParsedNode::Variable {
                                 name: word_str.to_owned(),
                                 exists: true,
+                                add_sub: 0,
                                 value: None
                             }
                         );
@@ -617,6 +619,7 @@ impl Parser {
                     node = ParsedNode::Variable {
                         name: word_str,
                         exists: true,
+                        add_sub: 0,
                         value: None
                     };
                     position += 1;
@@ -664,7 +667,18 @@ impl Parser {
         let sliced_tokens = &tokens[position..tokens.len()];
         let equal = sliced_tokens.iter().position(|pos| pos == Token::Assign);
 
+        let mut add_sub = 0;
         if equal.is_some() {
+            match &tokens[&equal.unwrap() - 1] {
+                Token::Plus => {
+                    add_sub = 1;
+                }
+                Token::Minus => {
+                    add_sub = 2;
+                }
+                _ => { }
+            }
+
             let name_map = sliced_tokens.iter().enumerate().filter(|(i, _)| i < &equal.unwrap()).map(|(_, v)| v);
 
             let mut name: String = "".to_owned();
@@ -687,6 +701,7 @@ impl Parser {
                 ParsedNode::Variable {
                     name: name,
                     exists: false,
+                    add_sub: add_sub,
                     value: Some(
                         Box::new(self.next_node(
                             true,

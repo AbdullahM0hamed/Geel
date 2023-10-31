@@ -33,13 +33,75 @@ impl Interpreter {
                     let output = self.solve_equation(items).0;
                     self.print(output);
                 },
-                ParsedNode::Variable { name, exists, value } => {
+                ParsedNode::Variable { name, exists, add_sub, value } => {
                     unsafe {
                         let prev = VARIABLE_DICT.iter().position(|(v, _)| v == name);
                         if !exists && value.is_some() {
                             if prev.is_some() {
                                 let pos = prev.unwrap();
-                                VARIABLE_DICT[pos].1 = value.clone().unwrap();
+
+                                match add_sub {
+                                    0 => {
+                                        VARIABLE_DICT[pos].1 = value.clone().unwrap();
+                                    }
+                                    1 => {
+                                        let mut all_items: Vec<Token> = Vec::new();
+                                        let old = (&VARIABLE_DICT[pos].1).to_owned();
+                                        match old.as_ref() {
+                                            ParsedNode::Equation { items } => {
+                                                all_items = items.to_owned();
+                                            }
+                                            ParsedNode::Int { val } | ParsedNode::Float { val } => {
+                                                all_items.push(Token::Float(val.to_owned()));
+                                            }
+                                            _ => { }
+                                        }
+
+                                        match value.clone().unwrap().as_ref().clone() {
+                                            ParsedNode::Equation { items } => {
+                                                all_items.push(Token::Plus);
+                                                all_items.append(&mut items.to_owned());
+                                            }
+                                            ParsedNode::Int { val } | ParsedNode::Float { val } => {
+                                                all_items.push(Token::Plus);
+                                                all_items.push(Token::Float(val.to_owned()));
+                                            }
+                                            _ => { }
+                                        }
+
+                                        let output = self.solve_equation(&all_items);
+                                        VARIABLE_DICT[pos].1 = Box::new(output.0);
+                                    }
+                                    2 => {
+                                        let mut all_items: Vec<Token> = Vec::new();
+                                        let old = (&VARIABLE_DICT[pos].1).to_owned();
+                                        match old.as_ref() {
+                                            ParsedNode::Equation { items } => {
+                                                all_items = items.to_owned();
+                                            }
+                                            ParsedNode::Int { val } | ParsedNode::Float { val } => {
+                                                all_items.push(Token::Float(val.to_owned()));
+                                            }
+                                            _ => { }
+                                        }
+
+                                        match value.clone().unwrap().as_ref().clone() {
+                                            ParsedNode::Equation { items } => {
+                                                all_items.push(Token::Minus);
+                                                all_items.append(&mut items.to_owned());
+                                            }
+                                            ParsedNode::Int { val } | ParsedNode::Float { val } => {
+                                                all_items.push(Token::Minus);
+                                                all_items.push(Token::Float(val.to_owned()));
+                                            }
+                                            _ => { }
+                                        }
+
+                                        let output = self.solve_equation(&all_items);
+                                        VARIABLE_DICT[pos].1 = Box::new(output.0);
+                                    }
+                                    _ => { }
+                                }
                             } else {
                                 VARIABLE_DICT.push((name.to_owned(), value.clone().unwrap()));
                             }
@@ -75,7 +137,7 @@ impl Interpreter {
                                             operator.clone(),
                                             left.clone(),
                                             right.clone()
-                                        );
+                                            );
                                         if !is_true {
                                             or_true = false;
                                             break;
@@ -107,7 +169,7 @@ impl Interpreter {
         operator: Token,
         left: Box<Vec<ParsedNode>>,
         right: Box<Vec<ParsedNode>>
-    ) -> bool {
+        ) -> bool {
         let mut left_solved: f64 = 0.0;
         let mut right_solved: f64 = 0.0;
 
@@ -188,7 +250,7 @@ impl Interpreter {
     pub fn solve_equation(
         &mut self,
         items: &Vec<Token>
-    ) -> (ParsedNode, f64) {
+        ) -> (ParsedNode, f64) {
         let mut equation: String = "".to_owned();
         items.into_iter().for_each(|item| {
             match item {
