@@ -354,11 +354,16 @@ impl Parser {
         return false;
     }
 
-    pub fn get_if_parsed(&mut self) -> ParsedNode {
+    pub fn get_if_parsed(
+        &mut self,
+        tokens: Vec<Token>,
+        loc: usize
+    ) -> (ParsedNode, usize) {
+        let mut position = loc;
         let mut indent_level = 0;
 
-        if self.position > 1 {
-            match (&self.tokens[self.position - 1]).to_owned() {
+        if position > 1 {
+            match (&tokens[position - 1]).to_owned() {
                 Token::Whitespace(space) => {
                     if space[space.len() - 1] != '\n' {
                         let pos = space.iter().position(|&n| n == '\n').unwrap();
@@ -373,13 +378,13 @@ impl Parser {
         let mut current_indent: usize = indent_level;
         let mut if_pos: usize = 0;
         loop {
-            if self.position >= self.tokens.len() {
+            if position >= tokens.len() {
                 break;
             }
 
-            match (&self.tokens[self.position]).to_owned() {
+            match (&tokens[position]).to_owned() {
                 Token::EOF => { 
-                    self.position += 1;
+                    position += 1;
                     break;
                 }
                 Token::Whitespace(space) => {
@@ -394,13 +399,13 @@ impl Parser {
 
                         if level == indent_level {
                             if self.is_still_if() {
-                                let token = (&self.tokens[self.position]).to_owned();
+                                let token = (&tokens[position]).to_owned();
                                 if if_pos >= if_tokens.len() {
                                     if_tokens.push((vec![token], current_indent));
                                 } else {
                                     if_tokens[if_pos].0.push(token);
                                 }
-                                self.position += 1;
+                                position += 1;
                                 continue;
                             }
 
@@ -408,7 +413,7 @@ impl Parser {
                         }
 
                     }
-                    self.position += 1;
+                    position += 1;
                 }
                 x => {
                     if if_pos >= if_tokens.len() {
@@ -417,14 +422,12 @@ impl Parser {
                         if_tokens[if_pos].0.push(x);
                     }
 
-                    self.position += 1;
+                    position += 1;
                 }
             }
         }
 
-        let a = self.parse_conditions(if_tokens);
-        //print!("M: {:?}\r\n", a);
-        return a;
+        return (self.parse_conditions(if_tokens), position);
     }
 
     pub fn parse_conditions(
@@ -609,7 +612,10 @@ impl Parser {
                     node = func.0;
                     position = func.1;
                 } else if &word_str == "hadduu" {
-                    node = self.get_if_parsed();
+                    println!("If");
+                    let parsed = self.get_if_parsed(self.tokens.clone(), position);
+                    position = parsed.1;
+                    node = parsed.0;
                 } else if self.is_assignment(tokens.clone(), position) {
                     let assigned = self.get_assignment(tokens, position);
                     position = assigned.1;
