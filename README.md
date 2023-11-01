@@ -123,7 +123,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] lambda -> laamda
 
-- [ ] nonlocal -
+- [ ] nonlocal -> xerokale
 
 - [ ] pass -> dhaaf
 
@@ -224,13 +224,13 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] list -> aruur
 
-- [ ] locals ->
+- [ ] locals -> xeradaan
 
 - [ ] map -> kushaqee
 
 - [ ] max -> ugubadnaan
 
-- [ ] memoryview ->
+- [ ] memoryview -> xasuusaragti
 
 - [ ] min -> uguyaraan
 
@@ -244,7 +244,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] ord -> lambarkadhig
 
-- [ ] pow ->
+- [ ] pow -> dhufocelcelis
 
 - [x] print -> qor
 
@@ -278,7 +278,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] type -> nooc
 
-- [ ] vars ->
+- [ ] vars -> doorsoomayaal
 
 - [ ] zip -> iskuxer
 
@@ -307,7 +307,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] ImportError -> KhaladKeenid
 
-- [ ] ModuleNotFoundError ->
+- [ ] ModuleNotFoundError -> KhaladKaydDibadeedLamaHelin
 
 - [ ] IndexError -> KhaladJagaale
 
@@ -321,7 +321,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] NotImplementedError -> KhaladLamaSameyn
 
-- [ ] OSError ->
+- [ ] OSError -> KhaladHabdhis
 
 - [ ] OverflowError -> KhaladWeynaan
 
@@ -345,7 +345,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] TypeError -> NoocKhaldan
 
-- [ ] UnboundLocalError ->
+- [ ] UnboundLocalError -> KhaladMaJiro
 
 - [ ] UnicodeError -> KhaladHabxarfeed
 
@@ -359,11 +359,11 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] ZeroDivisionError -> KhaladEberUQeybin
 
-- [ ] EnvironmentError ->
+- [ ] EnvironmentError -> KhaladDibadeed
 
 - [ ] IOError -> KhaladGB (Galin-Bixin)
 
-- [ ] BlockingIOError ->
+- [ ] BlockingIOError -> KhaladGBHalHal
 
 - [ ] ChildProcessError -> KhaladHawlQabashoDhaxlan
 
@@ -415,7 +415,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] BytesWarning -> DigniinDhibco
 
-- [ ] ResourceWarning ->
+- [ ] ResourceWarning -> DigniinHanti
 
 
 ## Additional (extra-pythonic)

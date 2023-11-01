@@ -427,6 +427,7 @@ impl Parser {
             }
         }
 
+        //println!("{:?}", if_tokens);
         return (self.parse_conditions(if_tokens), position);
     }
 
@@ -496,9 +497,15 @@ impl Parser {
 
                 parsed_conditions.push((parsed_cond, Vec::new()));
             } else {
-                let node = self.next_node(true, Some(cond.0.to_owned()), Some(0));
-                let last = parsed_conditions.len() - 1;
-                parsed_conditions[last].1.push(node);
+                let mut position = 0;
+                while position < cond.0.len() {
+                    let slice = cond.0.as_slice()[position..].to_vec();
+                    let node_pos = self.next_node(true, Some(slice), Some(0));
+                    let node = node_pos.0;
+                    position += node_pos.1;
+                    let last = parsed_conditions.len() - 1;
+                    parsed_conditions[last].1.push(node);
+                }
             }
         }
 
@@ -574,7 +581,7 @@ impl Parser {
         custom: bool,
         token_list: Option<Vec<Token>>,
         pos: Option<usize>
-    ) -> ParsedNode {
+    ) -> (ParsedNode, usize) {
         let mut tokens = (&self.tokens).to_owned();
         let mut position = (&self.position).to_owned();
 
@@ -600,7 +607,7 @@ impl Parser {
         }
 
         if position >= tokens.len() {
-            return ParsedNode::Ignore;
+            return (ParsedNode::Ignore, position);
         }
 
         let mut node = ParsedNode::Ignore;
@@ -612,10 +619,10 @@ impl Parser {
                     node = func.0;
                     position = func.1;
                 } else if &word_str == "hadduu" {
-                    println!("If");
                     let parsed = self.get_if_parsed(self.tokens.clone(), position);
                     position = parsed.1;
                     node = parsed.0;
+                    //println!("{:?}", &node);
                 } else if self.is_assignment(tokens.clone(), position) {
                     let assigned = self.get_assignment(tokens, position);
                     position = assigned.1;
@@ -652,7 +659,7 @@ impl Parser {
             }
         }
 
-        return node;
+        return (node, position);
     }
 
     pub fn is_assignment(
@@ -713,7 +720,7 @@ impl Parser {
                             true,
                             Some(value),
                             Some(0)
-                        ))
+                        ).0)
                     )
                 },
                 position + sliced_tokens.len()
@@ -733,7 +740,7 @@ impl Parser {
             }
 
             prev = self.position;
-            parsed.push(self.next_node(false, None, None));
+            parsed.push(self.next_node(false, None, None).0);
         }
         return parsed;
     }
