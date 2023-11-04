@@ -10,7 +10,7 @@ To build the interpreter, simply do: `cargo build` in the root folder.
 
 # Demo
 
-The REPL can be used here: [REPL](https://replit.com/@Red0192/Geel)
+The REPL can be used here: [geel](https://replit.com/@Red0192/Geel)
 
 # Usage
 
