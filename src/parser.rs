@@ -1,6 +1,12 @@
 use crate::lexer::Token;
 
 #[derive(Debug)]
+enum CondStruct {
+    Normal((Vec<Token>, usize)),
+    Scope(Vec<(Vec<Token>, usize)>)
+}
+
+#[derive(Debug)]
 #[derive(Clone)]
 pub enum ParsedNode {
     Function {
@@ -323,15 +329,19 @@ impl Parser {
         return (ParsedNode::Equation { items: operation_list }, position);
     }
 
-    pub fn is_still_if(&mut self) -> bool {
-        let mut non_whitespace: usize = self.position;
+    pub fn is_still_if(
+        &mut self,
+        tokens: Vec<Token>,
+        position: usize
+    ) ->  (bool, usize) {
+        let mut non_whitespace: usize = position;
         loop {
-            if non_whitespace >= self.tokens.len() {
+            if non_whitespace >= tokens.len() {
                 non_whitespace -= 1;
                 break;
             }
 
-            match &self.tokens[non_whitespace] {
+            match &tokens[non_whitespace] {
                 Token::Whitespace(_) | Token::Comment(_) => {
                     non_whitespace += 1;
                 },
@@ -339,19 +349,23 @@ impl Parser {
             }
         }
 
-        if non_whitespace < self.tokens.len() {
-            let token = (&self.tokens[non_whitespace]).to_owned();
+        if non_whitespace == tokens.len() - 1 {
+            return (true, non_whitespace)
+        }
+
+        if non_whitespace < tokens.len() {
+            let token = (&tokens[non_whitespace]).to_owned();
             match token {
                 Token::Word(word) => {
                     if &word.iter().collect::<String>() == "haddii" || &word.iter().collect::<String>() == "ama" {
-                        return true;
+                        return (true, non_whitespace);
                     }
                 }
                 _ => { }
             }
         }
 
-        return false;
+        return (false, non_whitespace)
     }
 
     pub fn get_if_parsed(
@@ -389,7 +403,11 @@ impl Parser {
                 }
                 Token::Whitespace(space) => {
                     let has_newline = space.iter().position(|&n| n == '\n');
-                    if !has_newline.is_none() {
+                    if has_newline.is_some() {
+                        if if_pos < if_tokens.len() {
+                            if_tokens[if_pos].0.push(Token::Ignore);
+                        }
+
                         let pos = has_newline.unwrap();
                         let level = space.len() - (pos + 1);
                         if current_indent != level {
@@ -398,13 +416,15 @@ impl Parser {
                         }
 
                         if level == indent_level {
-                            if self.is_still_if() {
+                            let still = self.is_still_if(tokens.clone(), position);
+                            if still.0 {
                                 let token = (&tokens[position]).to_owned();
                                 if if_pos >= if_tokens.len() {
                                     if_tokens.push((vec![token], current_indent));
                                 } else {
                                     if_tokens[if_pos].0.push(token);
                                 }
+
                                 position += 1;
                                 continue;
                             }
@@ -427,21 +447,104 @@ impl Parser {
             }
         }
 
-        //println!("{:?}", if_tokens);
         return (self.parse_conditions(if_tokens), position);
+    }
+
+    pub fn sanitise_cond(
+        &mut self,
+        conditions: Vec<(Vec<Token>, usize)>
+    ) -> Vec<CondStruct> {
+        if conditions.len() > 1 {
+            let top_indent = conditions[0].1;
+            let mut pos = 0;
+            let mut new_conds: Vec<CondStruct> = vec![];
+            while pos < conditions.len() {
+                let current = conditions[pos].clone();
+                let tok_vec = current.0.clone();
+                if tok_vec.len() > 1 && tok_vec[tok_vec.len() - 2] == Token::Colon && current.1 != top_indent {
+                    pos += 1;
+                    //Split by ignore
+                    let mut tokens: Vec<(Vec<Token>, usize)> = vec![current.clone()];
+                    while pos < conditions.len() {
+                        let mut next = conditions[pos].clone();
+                        if next.1 == current.1 {
+                            break;
+                        } else {
+                            tokens.push(next);
+                            pos += 1;
+                        }
+                    }
+
+                    let last = tokens[0].0.split_last().unwrap().1;
+                    let has_loc = last.iter().rev().position(|v| v == Token::Ignore);
+                    if has_loc.is_some() {
+                        let loc = last.len() - has_loc.unwrap() - 1;
+                        let normal = last.iter().enumerate().filter(|(i, _)| i < &loc).map(|(_, v)| v);
+                        let scope = last.iter().enumerate().filter(|(i, _)| i > &loc).map(|(_, v)| v);
+
+                        let mut normal_tok: Vec<Token> = vec![];
+                        for token in normal {
+                            normal_tok.push(token.clone());
+                        }
+
+                        if normal_tok.len() > 0 {
+                            new_conds.push(CondStruct::Normal((normal_tok, tokens[0].1)));
+                        }
+
+                        let mut scope_tok: Vec<Token> = vec![];
+                        for token in scope {
+                            scope_tok.push(token.clone());
+                        }
+
+                        tokens[0].0 = scope_tok;
+                        new_conds.push(CondStruct::Scope(tokens));
+                    } else {
+                        new_conds.push(CondStruct::Scope(tokens));
+                    }
+                } else {
+                    new_conds.push(CondStruct::Normal(current));
+                    pos += 1;
+                }
+            }
+
+            return new_conds;
+        }
+
+        let mut cond_vec: Vec<CondStruct> = vec![];
+
+        for cond in conditions {
+            cond_vec.push(CondStruct::Normal(cond));
+        }
+
+        return cond_vec;
     }
 
     pub fn parse_conditions(
         &mut self,
         conditions: Vec<(Vec<Token>, usize)>
         ) -> ParsedNode {
+        let new_conditions = self.sanitise_cond(conditions.clone());
+        //println!("S: {:?}", &new_conditions);
+        //println!("C: {:?}", &conditions);
         let mut parsed_conditions: Vec<(Vec<Vec<ParsedNode>>, Vec<ParsedNode>)> = Vec::new();
 
         let if_indent = conditions[0].1;
-        for cond in conditions {
-            let indent_level = cond.1;
+        for (i, value) in (&new_conditions).to_owned().iter().enumerate() {
+            let mut con: Option<(Vec<Token>, usize)> = None;
+            let mut scope: Option<Vec<(Vec<Token>, usize)>> = None;
+            let mut normal = true;
+            match value {
+                CondStruct::Scope(val) => {
+                    scope = Some(val.to_owned());
+                    normal = false;
+                }
+                CondStruct::Normal(val) => {
+                    con = Some(val.to_owned());
+                }
+            }
 
-            if indent_level == if_indent {
+            if normal && con.is_some() && con.clone().unwrap().1 == if_indent {
+                let cond = con.unwrap();
                 let mut parsed_cond: Vec<Vec<ParsedNode>> = Vec::new();
                 let or_divisions: Vec<Vec<Vec<Token>>> = self.get_or_separated((&cond.0).to_owned());
                 for or_list in or_divisions {
@@ -497,11 +600,26 @@ impl Parser {
 
                 parsed_conditions.push((parsed_cond, Vec::new()));
             } else {
+                if !normal && scope.is_some() {
+                    let parsed = self.parse_conditions(scope.unwrap());
+                    let last = parsed_conditions.len() - 1;
+                    parsed_conditions[last].1.push(parsed);
+                    continue;
+                }
+
+                let cond = con.unwrap();
                 let mut position = 0;
+                //let mapped = &conditions.as_slice()[i..].iter().map(|(v, _)| v.to_owned());
+                //let mut from_it: Vec<Token> = vec![];
+                //for mut token in mapped.to_owned() {
+                    //from_it.append(&mut token);
+                //}
+
                 while position < cond.0.len() {
                     let slice = cond.0.as_slice()[position..].to_vec();
                     let node_pos = self.next_node(true, Some(slice), Some(0));
                     let node = node_pos.0;
+                    //println!("N: {:?}", &node);
                     position += node_pos.1;
                     let last = parsed_conditions.len() - 1;
                     parsed_conditions[last].1.push(node);
@@ -619,10 +737,9 @@ impl Parser {
                     node = func.0;
                     position = func.1;
                 } else if &word_str == "hadduu" {
-                    let parsed = self.get_if_parsed(self.tokens.clone(), position);
+                    let parsed = self.get_if_parsed(tokens.clone(), position);
                     position = parsed.1;
                     node = parsed.0;
-                    //println!("{:?}", &node);
                 } else if self.is_assignment(tokens.clone(), position) {
                     let assigned = self.get_assignment(tokens, position);
                     position = assigned.1;
