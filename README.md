@@ -51,13 +51,21 @@ Some basic supported code:
 "Some Text"
 ```
 
+### For loops
+
+```
+>>> x kastoo faraq(1,10) kujira:
+...   qor("Some Text")
+...
+```
+
 Below is a checklist of keywords, methods, and errors that are planned, as well as their status - on the left will be a python keyword (except the last which is kotlin) and on the right will be the Somali word I've selected for it:
 
 ## Keywords
 
 - [x] and -> iyo
 
-- [ ] not -> maaha
+- [ ] not -> aheyn
 
 - [x] or -> ama
 
@@ -108,18 +116,9 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [x] else -> haddii-kale
 
-- [ ] for -> kastoo
+- [x] for -> kastoo
 
-- [ ] in -> kujira
-
-
-### Planned usage for for loops
-
-```
->>> x kastoo kujira [1,2,3,4,5]:
-...   [CODE]
-...
-```
+- [x] in -> kujira
 
 - [ ] global -> caalami
 
@@ -324,8 +323,6 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 - [ ] NameError -> KhaladMagceed
 
 - [ ] NotImplementedError -> KhaladLamaSameyn
-
-- [ ] OSError -> KhaladHabdhis
 
 - [ ] OverflowError -> KhaladWeynaan
 

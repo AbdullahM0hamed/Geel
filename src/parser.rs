@@ -8,6 +8,7 @@ enum CondStruct {
 
 #[derive(Debug)]
 #[derive(Clone)]
+#[derive(PartialEq)]
 pub enum ParsedNode {
     Function {
         name: String,
@@ -19,7 +20,9 @@ pub enum ParsedNode {
         params: Vec<ParsedNode>
     },
     ForLoop {
-        count: Vec<ParsedNode>
+        var: String,
+        iterable: Box<ParsedNode>,
+        body: Vec<ParsedNode>
     },
     WhileLoop {
         condition: Vec<ParsedNode>
@@ -41,6 +44,9 @@ pub enum ParsedNode {
     },
     Str {
         val: String
+    },
+    Bool {
+        val: bool
     },
     Equation {
         items: Vec<Token>
@@ -65,10 +71,11 @@ pub enum ParsedNode {
         add_sub: usize,
         value: Option<Box<ParsedNode>>
     },
+    Null,
     Ignore
 }
 
-const KEYWORDS: [&str; 103] = [
+const KEYWORDS: [&str; 172] = [
     "iyo", "maaha", "ama", "gudub", "booliyan", "jooji", "Run", "Been",
     "Waxba", "keen", "ka", "sida", "tijaabi", "qabo", "ugu", "dambeyn",
     "xaqiiji", "kayd", "qayb", "tir", "hadduu", "haddii", "kale", "kastoo",
@@ -85,7 +92,28 @@ const KEYWORDS: [&str; 103] = [
     "KhaladKeenid", "KhaladJagaale", "WaaLaJoojiyey", "KhaladXasuuseed",
     "KhaladMagceed", "KhaladLamaSameyn", "KhaladCelcelis", "NoocKhaldan",
     "KhaladQiimeyn", "KhaladEberUQeybin", "KhaladXiriixLaGoo", "KhaladXiriixLaDiid",
-    "KhaladOgolaansho", "DigniinKeenid", "markuu"
+    "KhaladOgolaansho", "DigniinKeenid", "markuu",
+    "kamidmid", "kawad", "qoraalkadhig", "bartaanbaar",
+    "kooxdhibco", "dhibco", "mashaquuqabtaa", "qoraalmid",
+    "kakan", "sifotir", "samee", "ururbadalmeyn", "sifokeen",
+    "lambarugaar", "makaydkoosocotaa", "makaydkuudhaxlay",
+    "xeradaan", "kushaqee", "xasuusaragti", "fur", "lambarkadhig",
+    "dhufocelcelis", "sifobadal", "qaybguud", "doorsoomayaal",
+    "KhaladXusaaaKuMeelGaar", "KhaladRaadin", "ShaqaaleNoqnoqodBax",
+    "KhaladKaydDibadeedLamaHelin", "KhaladFuro", "KhaladHabdhis",
+    "KhaladWeynaan", "KhaladTixraac", "KhaladGoortaShaqada",
+    "JoojiNoqnoqodka", "JoojiKalaNoqnoqodka", "KhaladBeegmid",
+    "KhaladBoodid", "KhaladHabdhis", "HabdhisBax", "KhaladMaJiro",
+    "KhaladHabxarfeed", "KhaladXarfeedUBadal", "KhaladXarfeedKaBadal",
+    "KhaladTurjumidHabxarfeed", "KhaladDibadeed", "KhaladGB",
+    "KhaladGBHalHal", "KhaladHawlQabashoDhaxlo", "KhaladXiriir",
+    "KhaladTuubboJaban", "KhaladDibUXiriir", "KhaladKaydWuuJira",
+    "KhaladKaydLamaHelin", "KhaladLaGoo", "KhaladWaaGal",
+    "KhaladGalMaaha", "KhaladHawlQabashoRaadin", "KhaladWaqtigaaKaDhamaaday",
+    "DigniinShaqsi", "DigniinWaaDuug", "DigniinDuugBuuNoqon",
+    "DigniinHabQoraal", "DigniinGoortaShaqada", "DigniinMustaqbal",
+    "DigniinHabxarfeed", "DigniinBadalid", "DigniinDhibco",
+    "DigniinHanti"
 ];
 
 #[derive(Debug)]
@@ -450,7 +478,7 @@ impl Parser {
         return (self.parse_conditions(if_tokens), position);
     }
 
-    pub fn sanitise_cond(
+    fn sanitise_cond(
         &mut self,
         conditions: Vec<(Vec<Token>, usize)>
     ) -> Vec<CondStruct> {
@@ -463,10 +491,9 @@ impl Parser {
                 let tok_vec = current.0.clone();
                 if tok_vec.len() > 1 && tok_vec[tok_vec.len() - 2] == Token::Colon && current.1 != top_indent {
                     pos += 1;
-                    //Split by ignore
                     let mut tokens: Vec<(Vec<Token>, usize)> = vec![current.clone()];
                     while pos < conditions.len() {
-                        let mut next = conditions[pos].clone();
+                        let next = conditions[pos].clone();
                         if next.1 == current.1 {
                             break;
                         } else {
@@ -524,12 +551,10 @@ impl Parser {
         conditions: Vec<(Vec<Token>, usize)>
         ) -> ParsedNode {
         let new_conditions = self.sanitise_cond(conditions.clone());
-        //println!("S: {:?}", &new_conditions);
-        //println!("C: {:?}", &conditions);
         let mut parsed_conditions: Vec<(Vec<Vec<ParsedNode>>, Vec<ParsedNode>)> = Vec::new();
 
         let if_indent = conditions[0].1;
-        for (i, value) in (&new_conditions).to_owned().iter().enumerate() {
+        for value in (&new_conditions).to_owned() {
             let mut con: Option<(Vec<Token>, usize)> = None;
             let mut scope: Option<Vec<(Vec<Token>, usize)>> = None;
             let mut normal = true;
@@ -609,17 +634,11 @@ impl Parser {
 
                 let cond = con.unwrap();
                 let mut position = 0;
-                //let mapped = &conditions.as_slice()[i..].iter().map(|(v, _)| v.to_owned());
-                //let mut from_it: Vec<Token> = vec![];
-                //for mut token in mapped.to_owned() {
-                    //from_it.append(&mut token);
-                //}
 
                 while position < cond.0.len() {
                     let slice = cond.0.as_slice()[position..].to_vec();
                     let node_pos = self.next_node(true, Some(slice), Some(0));
                     let node = node_pos.0;
-                    //println!("N: {:?}", &node);
                     position += node_pos.1;
                     let last = parsed_conditions.len() - 1;
                     parsed_conditions[last].1.push(node);
@@ -732,6 +751,7 @@ impl Parser {
         match &tokens[position] {
             Token::Word(word) => {
                 let word_str = word.to_vec().iter().collect::<String>();
+
                 if &tokens[next] == Token::OpenParen {
                     let func = self.get_function_call(word.to_vec(), tokens.clone(), position.clone());
                     node = func.0;
@@ -740,12 +760,17 @@ impl Parser {
                     let parsed = self.get_if_parsed(tokens.clone(), position);
                     position = parsed.1;
                     node = parsed.0;
-                } else if self.is_assignment(tokens.clone(), position) {
-                    let assigned = self.get_assignment(tokens, position);
-                    position = assigned.1;
-                    node = assigned.0;
                 } else if !KEYWORDS.contains(&(word_str.as_str())) {
-                    //For loop stuff
+                    if next < tokens.len() {
+                        if &tokens[next] == Token::Word(vec!['k', 'a', 's', 't', 'o', 'o']) {
+                            let parsed_loop = self.get_for_loop(tokens, position);
+                            if !custom {
+                                self.position = parsed_loop.1;
+                            }
+
+                            return parsed_loop;
+                        }
+                    }
                     node = ParsedNode::Variable {
                         name: word_str,
                         exists: true,
@@ -753,6 +778,10 @@ impl Parser {
                         value: None
                     };
                     position += 1;
+                } else if self.is_assignment(tokens.clone(), position) {
+                    let assigned = self.get_assignment(tokens, position);
+                    position = assigned.1;
+                    node = assigned.0;
                 } else {
                     position += 1;
                 }
@@ -777,6 +806,84 @@ impl Parser {
         }
 
         return (node, position);
+    }
+
+    pub fn get_for_loop(
+        &mut self,
+        tokens: Vec<Token>,
+        loc: usize
+    ) -> (ParsedNode, usize) {
+        let mut position = loc;
+        let mut indent_level = 0;
+
+        if position > 1 {
+            match (&tokens[position - 1]).to_owned() {
+                Token::Whitespace(space) => {
+                    if space[space.len() - 1] != '\n' {
+                        let pos = space.iter().position(|&n| n == '\n').unwrap();
+                        indent_level = space.len() - (pos + 1);
+                    }
+                },
+                _ => { }
+            }
+        }
+
+        //TODO: Unwrap may error, but this should be handled and treated as a syntax error
+        let colon = tokens.iter().position(|pos| pos == Token::Colon).unwrap();
+        let name_end = tokens.iter().position(|pos| pos == Token::Word("kastoo".chars().collect())).unwrap();
+        let iter_end = tokens.iter().position(|pos| pos == Token::Word("kujira".chars().collect())).unwrap();
+
+
+        let mut name =  "".to_string();
+        for token in tokens.iter().enumerate().filter(|(i, _)| i >= &position && i < &name_end).map(|(_, v)| v) {
+            match token {
+                Token::Word(word) => {
+                    name += &word.iter().collect::<String>();
+                }
+                _ => { }
+            }
+        }
+
+        let mut iterable: Vec<Token> = vec![];
+        for token in tokens.iter().enumerate().filter(|(i, _)| i > &name_end && i < &iter_end).map(|(_, v)| v) {
+            match token {
+                Token::Whitespace(_) => {
+                    continue;
+                }
+                _ => { }
+            }
+            iterable.push(token.to_owned());
+        }
+
+        let parsed_iterable = self.next_node(
+            true,
+            Some(iterable),
+            Some(0)
+        ).0;
+
+        let mut new_tokens: Vec<Token> = vec![];
+        position += colon;
+        for (i, token) in tokens.iter().enumerate().filter(|(i, _)| i > &colon) {
+            new_tokens.push(token.clone());
+        }
+
+        let mut new_pos = 0;
+        let mut body: Vec<ParsedNode> = vec![];
+        while new_pos < new_tokens.len() {
+            let node = self.next_node(
+                true,
+                Some(new_tokens.clone()),
+                Some(new_pos)
+            );
+            body.push(node.0);
+            new_pos += node.1.clone();
+        }
+
+        return (ParsedNode::ForLoop {
+            var: name,
+            iterable: Box::new(parsed_iterable),
+            body: body
+        }, position + new_pos)
     }
 
     pub fn is_assignment(
@@ -859,6 +966,7 @@ impl Parser {
             prev = self.position;
             parsed.push(self.next_node(false, None, None).0);
         }
+
         return parsed;
     }
 }

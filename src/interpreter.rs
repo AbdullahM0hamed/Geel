@@ -124,6 +124,24 @@ impl Interpreter {
                         }
                     }
                 },
+                ParsedNode::ForLoop { var, iterable, body } => {
+                    match iterable.as_ref().clone() {
+                        ParsedNode::FunctionCall { name, params } => {
+                            let out: Vec<ParsedNode> = Inbuilt::new().get_method(name.to_owned())(params.to_vec());
+                            self.iterate(
+                                var.clone(),
+                                (&out[0]).to_owned(),
+                                body.clone());
+                        }
+                        node => {
+                            self.iterate(
+                                var.clone(),
+                                node,
+                                body.clone()
+                            );
+                        }
+                    }
+                },
                 ParsedNode::IfChain { blocks } => {
                     for block in blocks {
                         let conditions = &block.0;
@@ -164,6 +182,22 @@ impl Interpreter {
                 _ => { self.print(block.to_owned()) }
             }
         });
+    }
+
+    fn iterate(
+        &mut self,
+        var: String,
+        node: ParsedNode,
+        body: Vec<ParsedNode>
+    ) {
+        match node {
+            ParsedNode::List { items } => {
+                for x in items {
+                    self.interpret(false, body.clone());
+                }
+            }
+            _ => { }
+        }
     }
 
     pub fn compare(
