@@ -16,6 +16,7 @@ pub enum Token {
     Minus,
     Divide,
     Multiply,
+    Power,
     Modulus,
     Greater,
     GreaterOrEqual,
@@ -225,6 +226,7 @@ impl Lexer {
             '-' => { token = Token::Minus; }
             '/' => { token = Token::Divide; }
             '*' => { token = Token::Multiply; }
+            '^' => { token = Token::Power; }
             '>' => { token = Token::Greater; }
             '<' => { token = Token::Less; }
             '%' => { token = Token::Modulus; }

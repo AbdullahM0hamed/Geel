@@ -213,6 +213,19 @@ impl Parser {
                             ParsedNode::Str { val: value.into_iter().collect() }
                             );
                     },
+                    Token::Word(word) => {
+                        let word_str = word.iter().collect::<String>();
+                        if !KEYWORDS.contains(&(word_str.as_str())) {
+                            params.push(
+                                ParsedNode::Variable {
+                                    name: word_str.to_owned(),
+                                    exists: true,
+                                    add_sub: 0,
+                                    value: None
+                                }
+                            );
+                        }
+                    },
                     _ => { }
                 }
             }
@@ -224,11 +237,12 @@ impl Parser {
         }, position)
     }
 
-    const OPERATIONS: [Token; 5] = [
+    const OPERATIONS: [Token; 6] = [
         Token::Plus,
         Token::Minus,
         Token::Divide,
         Token::Multiply,
+        Token::Power,
         Token::Modulus
     ];
 
@@ -313,7 +327,7 @@ impl Parser {
                 Token::Whitespace(_) | Token::Comment(_) => {
                     next += 1;
                 },
-                Token::Plus | Token::Minus | Token::Divide | Token::Multiply | Token::Modulus => {
+                Token::Plus | Token::Minus | Token::Divide | Token::Multiply | Token::Modulus | Token::Power => {
                     next += 1;
                 },
                 Token::Int(_) | Token::Float(_) => {
@@ -526,7 +540,25 @@ impl Parser {
                         tokens[0].0 = scope_tok;
                         new_conds.push(CondStruct::Scope(tokens));
                     } else {
-                        new_conds.push(CondStruct::Scope(tokens));
+                        let mut new_if: Vec<Token> = vec![];
+                        let mut new_vec: Vec<Token> = vec![];
+                        let mut cond_ended = false;
+                        for (mut token, pos) in tokens {
+                            if !cond_ended {
+                                for tok in token {
+                                    if tok == Token::Colon {
+                                        cond_ended = true;
+                                    }
+
+                                    new_if.push(tok);
+                                }
+                            } else {
+                                new_vec.append(&mut token);
+                            }
+                        }
+
+                        new_conds.push(CondStruct::Normal((new_if, top_indent.clone())));
+                        new_conds.push(CondStruct::Normal((new_vec, top_indent.clone() + 2)));
                     }
                 } else {
                     new_conds.push(CondStruct::Normal(current));
@@ -620,7 +652,11 @@ impl Parser {
                         }
                     }
 
-                    parsed_cond.push(combined);
+                    if parsed_cond.len() > 0 && parsed_cond[0].len() == 0 {
+                        parsed_cond[0] = combined;
+                    } else {
+                        parsed_cond.push(combined);
+                    }
                 }
 
                 parsed_conditions.push((parsed_cond, Vec::new()));
@@ -686,6 +722,27 @@ impl Parser {
                 Token::Word(word) => {
                     let word_str = word.iter().collect::<String>();
                     if !KEYWORDS.contains(&(word_str.as_str())) {
+                        let mut next = index + 1;
+                        loop {
+                            match comp[next] {
+                                Token::Whitespace(_) | Token::Comment(_) => {
+                                    next += 1;
+                                }
+                                _ => { break; }
+                            }
+                        }
+
+                        if Self::OPERATIONS.contains(&comp[next]) {
+                            let parsed = self.get_num_or_parse(
+                                true,
+                                Some(comp.clone()),
+                                Some(index)
+                            );
+                            parsed_comp.push(parsed.0);
+                            iter.nth(parsed.1 - index - 1);
+                            continue;
+                        }
+
                         parsed_comp.push(
                             ParsedNode::Variable {
                                 name: word_str.to_owned(),
@@ -760,6 +817,10 @@ impl Parser {
                     let parsed = self.get_if_parsed(tokens.clone(), position);
                     position = parsed.1;
                     node = parsed.0;
+                } else if self.is_assignment(tokens.clone(), position) {
+                    let assigned = self.get_assignment(tokens, position);
+                    position = assigned.1;
+                    node = assigned.0;
                 } else if !KEYWORDS.contains(&(word_str.as_str())) {
                     if next < tokens.len() {
                         if &tokens[next] == Token::Word(vec!['k', 'a', 's', 't', 'o', 'o']) {
@@ -769,6 +830,14 @@ impl Parser {
                             }
 
                             return parsed_loop;
+                        } else if Self::OPERATIONS.contains(&tokens[next]) {
+                           let parsed = self.get_num_or_parse(custom, Some(tokens), Some(position));
+
+                           if !custom {
+                               self.position = parsed.1;
+                           }
+
+                           return parsed;
                         }
                     }
                     node = ParsedNode::Variable {
@@ -778,10 +847,6 @@ impl Parser {
                         value: None
                     };
                     position += 1;
-                } else if self.is_assignment(tokens.clone(), position) {
-                    let assigned = self.get_assignment(tokens, position);
-                    position = assigned.1;
-                    node = assigned.0;
                 } else {
                     position += 1;
                 }
@@ -814,19 +879,20 @@ impl Parser {
         loc: usize
     ) -> (ParsedNode, usize) {
         let mut position = loc;
-        let mut indent_level = 0;
+        //TODO: Check line indentation, lest the for loop consumes all code
+        //let mut indent_level = 0;
 
-        if position > 1 {
-            match (&tokens[position - 1]).to_owned() {
-                Token::Whitespace(space) => {
-                    if space[space.len() - 1] != '\n' {
-                        let pos = space.iter().position(|&n| n == '\n').unwrap();
-                        indent_level = space.len() - (pos + 1);
-                    }
-                },
-                _ => { }
-            }
-        }
+        //if position > 1 {
+            //match (&tokens[position - 1]).to_owned() {
+                //Token::Whitespace(space) => {
+                    //if space[space.len() - 1] != '\n' {
+                        //let pos = space.iter().position(|&n| n == '\n').unwrap();
+                        //indent_level = space.len() - (pos + 1);
+                    //}
+                //},
+                //_ => { }
+            //}
+        //}
 
         //TODO: Unwrap may error, but this should be handled and treated as a syntax error
         let colon = tokens.iter().position(|pos| pos == Token::Colon).unwrap();
@@ -863,7 +929,7 @@ impl Parser {
 
         let mut new_tokens: Vec<Token> = vec![];
         position += colon;
-        for (i, token) in tokens.iter().enumerate().filter(|(i, _)| i > &colon) {
+        for (_, token) in tokens.iter().enumerate().filter(|(i, _)| i > &colon) {
             new_tokens.push(token.clone());
         }
 
@@ -892,8 +958,19 @@ impl Parser {
         position: usize
     ) -> bool {
         let sliced_tokens = &tokens[position..tokens.len()];
+        let pos = sliced_tokens.iter().position(|token| token == Token::Assign);
 
-        return sliced_tokens.contains(&Token::Assign);
+        if pos.is_some() {
+            let loc = pos.unwrap();
+            if loc < sliced_tokens.len() - 1 {
+                let next = &sliced_tokens[loc + 1];
+                if next != Token::Assign {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     pub fn get_assignment(
@@ -906,6 +983,7 @@ impl Parser {
 
         let mut add_sub = 0;
         if equal.is_some() {
+
             match &tokens[&equal.unwrap() - 1] {
                 Token::Plus => {
                     add_sub = 1;

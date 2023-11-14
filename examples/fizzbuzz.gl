@@ -1,5 +1,5 @@
 //Single-line comment
-x kastoo faraq(1, 99) kujira:
+x kastoo faraq(1, 101) kujira:
     hadduu x % 3 >= 0 iyo x % 5 == 0:
         qor("FizzBuzz")
     ama hadduu x % 3 == 0:

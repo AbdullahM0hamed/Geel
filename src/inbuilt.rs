@@ -1,4 +1,5 @@
 use crate::parser::ParsedNode;
+use crate::interpreter::VARIABLE_DICT;
 
 pub struct Inbuilt<'a> {
     pub methods: Vec<(String, &'a dyn Fn(Vec<ParsedNode>) -> Vec<ParsedNode>)>
@@ -48,16 +49,40 @@ impl Inbuilt<'_> {
         let mut output: String = "".to_owned();
         params.iter().for_each(|arg| {
             match arg {
-                ParsedNode::Str { val } => {
-                    output.push_str(val);
+                ParsedNode::Variable { name, .. } => {
+                    unsafe {
+                        let var = VARIABLE_DICT.iter().position(|(v, _)| v == name);
+                        if var.is_some() {
+                            let loc = var.unwrap();
+                            let val = &VARIABLE_DICT[loc];
+                            output.push_str(
+                                &Self::parsed_string(val.1.as_ref().clone())
+                            );
+                        }
+                    }
                 },
-                _ => { }
+                x => { output.push_str(&Self::parsed_string(x.clone())) }
             }
         });
         print!("{}\r\n", output.trim());
         return vec![];
     }
 
+    pub fn parsed_string(
+        value: ParsedNode
+    ) -> String {
+        match value {
+                ParsedNode::Str { val } => {
+                    return val;
+                },
+                ParsedNode::Int { val } | ParsedNode::Float { val } => {
+                    return val.iter().collect::<String>();
+                }
+                _ => { }
+        }
+
+        return "".to_owned();
+    }
     pub fn labaale(params: Vec<ParsedNode>) -> Vec<ParsedNode> {
         let arg: ParsedNode = (&params[0]).to_owned();
         match arg {

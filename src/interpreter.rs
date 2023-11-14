@@ -6,7 +6,7 @@ use meval::eval_str;
 pub struct Interpreter {
 }
 
-static mut VARIABLE_DICT: Vec<(String, Box<ParsedNode>)> = Vec::new();
+pub static mut VARIABLE_DICT: Vec<(String, Box<ParsedNode>)> = Vec::new();
 impl Interpreter {
     pub fn new() -> Self {
         Self {}
@@ -156,7 +156,7 @@ impl Interpreter {
                                             operator.clone(),
                                             left.clone(),
                                             right.clone()
-                                            );
+                                        );
                                         if !is_true {
                                             or_true = false;
                                             break;
@@ -173,7 +173,6 @@ impl Interpreter {
                         }
 
                         if any {
-                            //println!("Any: {:?}", &block.1);
                             self.interpret(repl, (&block.1).to_owned());
                             break;
                         }
@@ -193,6 +192,19 @@ impl Interpreter {
         match node {
             ParsedNode::List { items } => {
                 for x in items {
+                    unsafe {
+                        let pos = VARIABLE_DICT.iter().position(
+                            |(v, _)| v == &var
+                        );
+
+                        if pos.is_some() {
+                            VARIABLE_DICT[pos.unwrap()].1 = Box::new(x);
+                        } else {
+                            VARIABLE_DICT.push(
+                                (var.clone(), Box::new(x))
+                            );
+                        }
+                    }
                     self.interpret(false, body.clone());
                 }
             }
@@ -300,6 +312,9 @@ impl Interpreter {
                 Token::Multiply => {
                     equation += "*";
                 },
+                Token::Power => {
+                    equation += "^";
+                },
                 Token::Plus => {
                     equation += "+";
                 },
@@ -308,6 +323,15 @@ impl Interpreter {
                 },
                 Token::Modulus => {
                     equation += "%";
+                },
+                Token::Word(word) => {
+                    unsafe {
+                        let pos = VARIABLE_DICT.iter().position(|(name, _)| name == &word.iter().collect::<String>());
+                        if pos.is_some() {
+                            let loc = pos.unwrap();
+                            equation += &Inbuilt::parsed_string(VARIABLE_DICT[loc].1.as_ref().clone());
+                        }
+                    }
                 },
                 _ => { }
             }
@@ -360,7 +384,6 @@ impl Interpreter {
             end = "";
         }
 
-        //println!("{:?}", node);
         match node {
             ParsedNode::Function { name, .. } => {
                 return format!("Function {}(){}", name, end);
