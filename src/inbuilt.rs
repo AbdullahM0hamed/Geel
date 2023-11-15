@@ -64,7 +64,15 @@ impl Inbuilt<'_> {
                 x => { output.push_str(&Self::parsed_string(x.clone())) }
             }
         });
-        print!("{}\r\n", output.trim());
+
+        let finalised = output.trim();
+        if finalised.len() > 0 && ['"', '\''].contains(&finalised.chars().nth(0).unwrap()) && finalised.chars().nth(finalised.len() - 1) == finalised.chars().nth(0) {
+            let to_print: String = finalised.chars().enumerate().filter(|(x, _)| x != &(0 as usize) && x != &(finalised.len() - 1)).map(|(_, v)| v).collect();
+            print!("{}\r\n", to_print.trim());
+        } else {
+            print!("{}\r\n", output.trim());
+        }
+
         return vec![];
     }
 

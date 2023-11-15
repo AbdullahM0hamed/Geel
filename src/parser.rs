@@ -477,6 +477,9 @@ impl Parser {
                     }
                     position += 1;
                 }
+                Token::Comment(_) => {
+                    position += 1;
+                }
                 x => {
                     if if_pos >= if_tokens.len() {
                         if_tokens.push((vec![x], current_indent));

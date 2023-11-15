@@ -317,7 +317,8 @@ fn main() {
             if !name.is_empty() {
                 if Path::new(&name).exists() {
                     let contents = read_to_string(name).unwrap();
-                    println!("{:?}", parser::Parser::new(Lexer::new(&contents).lex()).parse());
+                    let parsed = parser::Parser::new(Lexer::new(&contents).lex()).parse();
+                    interpreter::Interpreter::new().interpret(false, parsed);
                 } else {
                     println!("Wax jirin baad noo tilmaamtey.");
                 }
