@@ -12,6 +12,14 @@ To build the interpreter, simply do: `cargo build` in the root folder.
 
 The REPL can be used here: [geel](https://replit.com/@Red0192/Geel)
 
+# Examples
+
+The examples folder contains some simple sample code written in the Geel language. Below are the examples, and whether they are currently supported (a demo of supported examples being run can be found [here](https://replit.com/@Red0192/Geel-Examples):
+
+- [x] Fizzbuzz example
+
+- [ ] Fibonacci example
+
 # Usage
 
 To use the REPL run: `target/debug/geel`
