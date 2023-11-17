@@ -7,13 +7,16 @@ pub struct Interpreter {
 }
 
 pub static mut VARIABLE_DICT: Vec<(String, Box<ParsedNode>)> = Vec::new();
+pub static mut BREAK: bool = false;
+
 impl Interpreter {
     pub fn new() -> Self {
         Self {}
     }
 
     pub fn interpret(&mut self, repl: bool, parsed: Vec<ParsedNode>) {
-        parsed.iter().for_each(|block| {
+        //parsed.iter().for_each(|block| {
+        for block in parsed {
             match block {
                 ParsedNode::FunctionCall { name, params } => {
                     let out: Vec<ParsedNode> = Inbuilt::new().get_method(name.to_owned())(params.to_vec());
@@ -30,19 +33,19 @@ impl Interpreter {
                     }
                 },
                 ParsedNode::Bool { val } => {
-                    if *val {
+                    if val {
                         print!("Run\r\n");
                     } else {
                         print!("Been\r\n");
                     }
                 },
                 ParsedNode::Equation { items } => {
-                    let output = self.solve_equation(items).0;
+                    let output = self.solve_equation(&items).0;
                     self.print(output);
                 },
                 ParsedNode::Variable { name, exists, add_sub, value } => {
                     unsafe {
-                        let prev = VARIABLE_DICT.iter().position(|(v, _)| v == name);
+                        let prev = VARIABLE_DICT.iter().position(|(v, _)| v == &name);
                         if !exists && value.is_some() {
                             if prev.is_some() {
                                 let pos = prev.unwrap();
@@ -115,7 +118,7 @@ impl Interpreter {
                             }
                         }
 
-                        if *exists {
+                        if exists {
                             if prev.is_some() {
                                 let pos = prev.unwrap();
                                 let parsed = VARIABLE_DICT[pos].1.as_ref().clone();
@@ -154,6 +157,15 @@ impl Interpreter {
                                 body.clone()
                             );
                         }
+                    }
+                },
+                ParsedNode::Continue => {
+                    break;
+                },
+                ParsedNode::Break => {
+                    unsafe {
+                        BREAK = true;
+                        break;
                     }
                 },
                 ParsedNode::IfChain { blocks } => {
@@ -204,7 +216,7 @@ impl Interpreter {
                 },
                 _ => { self.print(block.to_owned()) }
             }
-        });
+        }
     }
 
     fn iterate(
@@ -217,15 +229,19 @@ impl Interpreter {
             ParsedNode::List { items } => {
                 for x in items {
                     unsafe {
+                        if BREAK {
+                            break;
+                        }
+
                         let pos = VARIABLE_DICT.iter().position(
                             |(v, _)| v == &var
                         );
 
                         if pos.is_some() {
-                            VARIABLE_DICT[pos.unwrap()].1 = Box::new(x);
+                            VARIABLE_DICT[pos.unwrap()].1 = Box::new(x.clone());
                         } else {
                             VARIABLE_DICT.push(
-                                (var.clone(), Box::new(x))
+                                (var.clone(), Box::new(x.clone()))
                             );
                         }
                     }

@@ -73,15 +73,15 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [x] and -> iyo
 
-- [ ] not -> aheyn
+- [x] not -> aheyn
 
 - [x] or -> ama
 
-- [ ] continue -> gudub
+- [x] continue -> gudub
 
 - [ ] boolean -> booliyan
 
-- [ ] break -> jooji
+- [x] break -> jooji
 
 - [x] True -> Run
 

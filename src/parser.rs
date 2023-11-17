@@ -72,6 +72,8 @@ pub enum ParsedNode {
         value: Option<Box<ParsedNode>>
     },
     Null,
+    Continue,
+    Break,
     Ignore
 }
 
@@ -843,13 +845,29 @@ impl Parser {
                     position = parsed.1;
                     node = parsed.0;
                 } else if &word_str == "Run" { 
-                    node = ParsedNode::Bool { val: true };
+                    let value = if &tokens[next] == Token::Word(vec!['a', 'h', 'e', 'y', 'n']) { false } else { true };
+                    node = ParsedNode::Bool { val: value };
                     position += 1;
+
+                    if !value {
+                        position = next;
+                    }
                 } else if &word_str == "Been" {
-                    node = ParsedNode::Bool { val: false };
+                    let value = if &tokens[next] == Token::Word(vec!['a', 'h', 'e', 'y', 'n']) { false } else { true };
+                    node = ParsedNode::Bool { val: value };
                     position += 1;
+
+                    if !value {
+                        position = next;
+                    }
                 } else if &word_str == "Waxba" {
                     node = ParsedNode::Null;
+                    position += 1;
+                } else if &word_str == "gudub" {
+                    node = ParsedNode::Continue;
+                    position += 1;
+                } else if &word_str == "jooji" {
+                    node = ParsedNode::Break;
                     position += 1;
                 } else if self.is_assignment(tokens.clone(), position) {
                     let assigned = self.get_assignment(tokens, position);
