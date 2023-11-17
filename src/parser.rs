@@ -546,7 +546,7 @@ impl Parser {
                         let mut new_if: Vec<Token> = vec![];
                         let mut new_vec: Vec<Token> = vec![];
                         let mut cond_ended = false;
-                        for (mut token, pos) in tokens {
+                        for (mut token, _) in tokens {
                             if !cond_ended {
                                 for tok in token {
                                     if tok == Token::Colon {
@@ -652,6 +652,28 @@ impl Parser {
                             };
 
                             combined.push(comparison);
+                        } else {
+                            for token in and_cond {
+                                match token {
+                                    Token::Word(word) => {
+                                        let word_str = word.to_vec().iter().collect::<String>();
+                                        if &word_str == "Run" {
+                                            combined.push(
+                                                ParsedNode::Bool { val: true }
+                                            );
+                                        } else if &word_str == "Been" {
+                                            combined.push(
+                                                ParsedNode::Bool { val: false }
+                                            );
+                                        } else if &word_str == "Waxba" {
+                                            combined.push(
+                                                ParsedNode::Null
+                                            );
+                                        }
+                                    }
+                                    _ => { }
+                                }
+                            }
                         }
                     }
 
@@ -820,6 +842,15 @@ impl Parser {
                     let parsed = self.get_if_parsed(tokens.clone(), position);
                     position = parsed.1;
                     node = parsed.0;
+                } else if &word_str == "Run" { 
+                    node = ParsedNode::Bool { val: true };
+                    position += 1;
+                } else if &word_str == "Been" {
+                    node = ParsedNode::Bool { val: false };
+                    position += 1;
+                } else if &word_str == "Waxba" {
+                    node = ParsedNode::Null;
+                    position += 1;
                 } else if self.is_assignment(tokens.clone(), position) {
                     let assigned = self.get_assignment(tokens, position);
                     position = assigned.1;

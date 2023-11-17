@@ -29,6 +29,13 @@ impl Interpreter {
                         }
                     }
                 },
+                ParsedNode::Bool { val } => {
+                    if *val {
+                        print!("Run\r\n");
+                    } else {
+                        print!("Been\r\n");
+                    }
+                },
                 ParsedNode::Equation { items } => {
                     let output = self.solve_equation(items).0;
                     self.print(output);
@@ -117,7 +124,14 @@ impl Interpreter {
                                     ParsedNode::Equation { items } => {
                                         let output = self.solve_equation(&items).0;
                                         self.print(output);
-                                    }
+                                    },
+                                    ParsedNode::Bool { val } => {
+                                        if val {
+                                            print!("Run\r\n");
+                                        } else {
+                                            print!("Been\r\n");
+                                        }
+                                    },
                                     _ => { self.print(parsed) }
                                 }
                             }
@@ -161,7 +175,17 @@ impl Interpreter {
                                             or_true = false;
                                             break;
                                         }
-                                    }
+                                    },
+                                    ParsedNode::Bool { val } => {
+                                        if !val {
+                                            or_true = false;
+                                            break;
+                                        }
+                                    },
+                                    ParsedNode::Null => {
+                                        or_true = false;
+                                        break;
+                                    },
                                     _ => { }
                                 }
                             }

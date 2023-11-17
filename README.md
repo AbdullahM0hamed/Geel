@@ -83,11 +83,11 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] break -> jooji
 
-- [ ] True -> Run
+- [x] True -> Run
 
-- [ ] False -> Been
+- [x] False -> Been
 
-- [ ] None -> Waxba
+- [x] None -> Waxba
 
 - [ ] import -> keen
 
@@ -116,7 +116,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] def -> qayb
 
-- [ ] del -> tir
+- [x] del -> tir
 
 - [x] if -> hadduu
 
@@ -197,7 +197,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] exec -> samee
 
-- [ ] exit -> bax
+- [x] exit -> bax
 
 - [ ] filter -> kasooc
 
@@ -223,7 +223,7 @@ Below is a checklist of keywords, methods, and errors that are planned, as well 
 
 - [ ] input -> weydii
 
-- [ ] int -> tirodhan
+- [x] int -> tirodhan
 
 - [ ] isinstance -> makaydkoosocotaa
 

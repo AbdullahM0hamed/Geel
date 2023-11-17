@@ -1,5 +1,6 @@
 use crate::parser::ParsedNode;
 use crate::interpreter::VARIABLE_DICT;
+use std::process;
 
 pub struct Inbuilt<'a> {
     pub methods: Vec<(String, &'a dyn Fn(Vec<ParsedNode>) -> Vec<ParsedNode>)>
@@ -26,6 +27,18 @@ impl Inbuilt<'_> {
                 (
                     "faraq".to_string(),
                     &Self::faraq
+                ),
+                (
+                    "tir".to_string(),
+                    &Self::tir
+                ),
+                (
+                    "bax".to_string(),
+                    &Self::bax
+                ),
+                (
+                    "tirodhan".to_string(),
+                    &Self::tirodhan
                 )
             ]
         }
@@ -91,6 +104,7 @@ impl Inbuilt<'_> {
 
         return "".to_owned();
     }
+
     pub fn labaale(params: Vec<ParsedNode>) -> Vec<ParsedNode> {
         let arg: ParsedNode = (&params[0]).to_owned();
         match arg {
@@ -212,6 +226,63 @@ impl Inbuilt<'_> {
                     },
                     _ => { }
                 }
+            }
+        }
+
+        return vec![];
+    }
+
+    pub fn tir(params: Vec<ParsedNode>) -> Vec<ParsedNode> {
+        for param in params {
+            match param {
+                ParsedNode::Variable { name, .. } => {
+                    unsafe {
+                        let pos = VARIABLE_DICT.iter().position(|(var, _)| var == &name);
+                        if pos.is_some() {
+                            VARIABLE_DICT.remove(pos.unwrap());
+                        }
+                    }
+                }
+                _ => { }
+            }
+        }
+
+        return vec![];
+    }
+
+    pub fn bax(params: Vec<ParsedNode>) -> Vec<ParsedNode> {
+        process::exit(0);
+        return vec![];
+    }
+
+    pub fn tirodhan(params: Vec<ParsedNode>) -> Vec<ParsedNode> {
+        if params.len() > 0 {
+            match params[0].clone() {
+                ParsedNode::Str { val } => {
+                    let val_vec: Vec<char> = val.chars().collect();
+                    if val.contains(".") {
+                        return vec![
+                            ParsedNode::Float {
+                                val: val_vec
+                            }
+                        ];
+                    } else {
+                        return vec![
+                            ParsedNode::Int {
+                                val: val_vec
+                            }
+                        ];
+                    }
+                },
+                ParsedNode::Bool { val } => {
+                    let num = if val { '0' } else { '1' };
+                    return vec![
+                        ParsedNode::Int {
+                            val: vec![num]
+                        }
+                    ];
+                }
+                _ => { }
             }
         }
 
